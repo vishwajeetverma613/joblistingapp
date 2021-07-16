@@ -1,5 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import Header from "./Components/Header";
+import Jobcard from "./Components/Jobcard";
 import Search from "./Components/Search";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
         <Grid item xs={10}>
           <Header></Header>
           <Search></Search>
+          <Jobcard></Jobcard>
         </Grid>
       </Grid>
     </div>
