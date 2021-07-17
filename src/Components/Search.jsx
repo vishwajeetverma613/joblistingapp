@@ -24,8 +24,8 @@ const Search = () => {
     return ( 
         <Box p={2} className={classes.wrapper}>
             <Select disableUnderline variant="filled" defaultValue = "Full Time">
-                <MenuItem value = "fulltime">Full Time</MenuItem>
-                <MenuItem value = "parttime">Part Time</MenuItem>
+                <MenuItem value = "full time">Full Time</MenuItem>
+                <MenuItem value = "part time">Part Time</MenuItem>
                 <MenuItem value = "internship">Internship</MenuItem>
             </Select>
 
