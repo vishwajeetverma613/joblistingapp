@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Box,
@@ -28,18 +28,28 @@ const skills = [
   "BackEnd",
 ];
 
-const NewjobmModal = () => {
-  const [jobDetails, setjobDetails] = useState({
-    title: "",
-    type: "Full-Time",
-    companyName: "",
-    companyUrl: "",
-    location: "remote",
-    link: "",
-    description: "",
-    skills: [],
-  });
 
+//state used to set the intitial state and use it later on
+const initState = {
+  title: "",
+  type: "Full-Time",
+  companyName: "",
+  companyUrl: "",
+  location: "remote",
+  link: "",
+  description: "",
+  skills: [],
+};
+
+const NewjobmModal = (props) => {
+
+  //state used for display of loading
+  const [loading, setLoading] = useState(false);
+
+  //state used to store job details
+  const [jobDetails, setjobDetails] = useState(initState);
+
+  //function to hande change in job details 
   const handleChange = (e) => {
     e.persist();
     //yahe pe hum old state or new state ko map krre h taki agar koi ek hi feild change toh wohi reflec hoye baki aise ke aise hi rahe
@@ -47,6 +57,26 @@ const NewjobmModal = () => {
       ...oldState,
       [e.target.name]: e.target.value,
     }));
+  };
+
+
+ // function used to submit the fimr and save it to th edatabse implementtion on app.js
+  const handleSubmit = async () => {
+    for (feild in jobDetails) {
+      if (typeof jobDetails[feild] === "string") {
+      }
+    }
+    setLoading(true);
+    await props.postJob(jobDetails);
+    closeModal();
+  };
+
+
+  //function used to make close icon openrational
+  const closeModal = () => {
+    setjobDetails(initState);
+    setLoading(false);
+    props.closeJobModal();
   };
 
   const useStyles = makeStyles({
@@ -66,7 +96,7 @@ const NewjobmModal = () => {
         color: "#fff",
       },
     },
-    included:{
+    included: {
       backgroundColor: "#0B0B15",
       color: "#fff",
     },
@@ -89,12 +119,12 @@ const NewjobmModal = () => {
 
   const classes = useStyles();
   return (
-    <Dialog open={true} fullWidth>
+    <Dialog open={props.displayModal} fullWidth>
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           Post Job
-          <IconButton>
-            <ClosedIcon></ClosedIcon>
+          <IconButton onClick={closeModal}>
+            <ClosedIco></ClosedIco>
           </IconButton>
         </Box>
       </DialogTitle>
@@ -199,7 +229,9 @@ const NewjobmModal = () => {
                   onClick={() => addRemoveSkill(skill)}
                   key={skill}
                   //isko use kiya hai UI ke liye
-                  className={`${classes.skillcard} ${jobDetails.skills.includes(skill) && classes.included}`}
+                  className={`${classes.skillcard} ${
+                    jobDetails.skills.includes(skill) && classes.included
+                  }`}
                 >
                   {skill}
                 </Box>
@@ -217,8 +249,21 @@ const NewjobmModal = () => {
           alignItems="center"
         >
           <Typography variant="caption">*required fields</Typography>
-          <Button variant="contained" disabledElevation>
-            Post job
+          <Button
+
+          //handle sumission onclick
+            onClick={handleSubmit}
+            variant="contained"
+            disabledElevation
+            color="primary"
+            disabled={loading}
+          >
+            {/* diaable the button whent the data is updating in firebase */}
+            {loading ? (
+              <CircularProgress color="secondary" size={22} />
+            ) : (
+              "PostJob"
+            )}
           </Button>
         </Box>
       </DialogActions>
