@@ -62,10 +62,16 @@ const NewjobmModal = (props) => {
 
  // function used to submit the fimr and save it to th edatabse implementtion on app.js
   const handleSubmit = async () => {
-    for (feild in jobDetails) {
-      if (typeof jobDetails[feild] === "string") {
+    //this for loop is added so that all thee data are filled while posting  the job
+    for (const feild in jobDetails) {
+      if (typeof jobDetails[feild] === "string" && !jobDetails[feild]) {
+        return alert('please fill all the fields correctly');
       }
     }
+    if(!jobDetails.skills.length){
+      return alert('please fill all the fields correctly');
+    }
+    
     setLoading(true);
     await props.postJob(jobDetails);
     closeModal();
@@ -222,7 +228,7 @@ const NewjobmModal = (props) => {
           </Grid>
 
           <Box mt={2}>
-            <Typography>Skills</Typography>
+            <Typography>Skills*</Typography>
             <Box display="flex">
               {skills.map((skill) => (
                 <Box

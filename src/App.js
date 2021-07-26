@@ -35,6 +35,27 @@ function App() {
     setLoading(false);
   };
 
+  //function for the search bar fetching
+  const searchJobs = async (jobsearchDetails) => {
+    setLoading(true);
+    const req = await firestore
+      .collection("jobs")
+      .orderBy("postedOn", "desc")
+      .where("location", '===', jobsearchDetails.location)
+      .where("type" ,'===', jobsearchDetails.type)
+      .get();
+    console.log(req);
+    const tempJobs = req.docs.map((job) => ({
+      ...job.data(),
+      id: job.id,
+      postedOn: job.data().postedOn.toDate(),
+    }));
+    setJobs(tempJobs);
+
+    //for loading puposese
+    setLoading(false);
+  };
+
 
   //function for posting a job
 
@@ -65,7 +86,7 @@ function App() {
         <Grid container justifyContent="center">
           <Grid item xs={10}>
             <Header openJobModal = {()=> setdisplayModal(true)}></Header>
-            <Search></Search>
+            <Search searchJobs={searchJobs} ></Search>
           {/* loading componenetwe have use here using maaterail UI */}
             {loading ? (
               <Box diaplay="flex" justifyContent="center"><CircularProgress/></Box>
